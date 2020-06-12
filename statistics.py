@@ -31,18 +31,42 @@ def avg_distance(graph):
     return np.sum(all_lengths) / (len(all_nodes)*(len(all_nodes)-1))  
 
 
+def wspolczynnik_gronowania(graph):
+    
+    c_i_list = []
+    
+    for node in list(graph.nodes):
+        neighbors = graph.adj[node].keys()
+        node_neighbor_egdes = 0
+        for n1, n2 in itertools.product(neighbors, neighbors):
+            if n1 != n2 and graph.has_edge(n1, n2):
+                node_neighbor_egdes += 1
+ 
+        node_all_possible_egdes = graph.degree[node] * (graph.degree[node]-1)/2
+        
+        if node_all_possible_egdes != 0:
+            c_i = node_neighbor_egdes / node_all_possible_egdes
+            c_i_list.append(c_i)
+        else:
+            return None
+    
+    return np.mean(c_i_list)
+
+
 def stats(graph):
     stats_dict = {}
     
     stats_dict['N'] = graph.number_of_nodes()
-    print("N: " + str(stats_dict['N']))
+    print("Liczba węzłów: " + str(stats_dict['N']))
     stats_dict['E'] = graph.number_of_edges()
-    print("E: " + str(stats_dict['E']))
+    print("Liczba krawędzi: " + str(stats_dict['E']))
     stats_dict['knn'] = knn(graph)
-    print("knn: " + str(stats_dict['knn']))
+    print("Średni stopień najbliższego węzła: " + str(stats_dict['knn']))
     stats_dict['corr'] = nx.degree_pearson_correlation_coefficient(graph)
-    print("corr: " + str(stats_dict['corr']))
+    print("Współczynnik korelacji: " + str(stats_dict['corr']))
+    stats_dict['wsp_gron'] = wspolczynnik_gronowania(graph)
+    print("Współczynnik gronowania: " + str(stats_dict['wsp_gron']))
     stats_dict['avg_dist'] = avg_distance(graph)
-    print("avg_dist: " + str(stats_dict['avg_dist']))
+    print("Średni dystans: " + str(stats_dict['avg_dist']))
+   
     
-    return stats_dict
