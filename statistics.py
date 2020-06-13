@@ -66,7 +66,9 @@ def stats(graph):
     print("Współczynnik korelacji: " + str(stats_dict['corr']))
     stats_dict['wsp_gron'] = wspolczynnik_gronowania(graph)
     print("Współczynnik gronowania: " + str(stats_dict['wsp_gron']))
-    stats_dict['avg_dist'] = avg_distance(graph)
+    
+    # zdecydowaliśmy się na wykorzystanie funkcji z biblioteki nx, ponieważ działa zdecydowanie szybciej
+    stats_dict['avg_dist'] = nx.average_shortest_path_length(graph)
     print("Średni dystans: " + str(stats_dict['avg_dist']))
    
     
